@@ -20,44 +20,59 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //为主界面左边的按钮设置监听事件
+        final Button button_left = (Button)findViewById(R.id.left_button);
+        button_left.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setMessage("请点击右面的登陆按钮登陆")//显示的消息内容
+                                           .setTitle("提示");//对话框标题
+                        builder.show();
+                    }
+                }
+        );
+
+
         //为主界面右面的按钮设置监听事件
         final Button button_right = (Button)findViewById(R.id.right_button);
-        button_right.setOnClickListener(new View.OnClickListener() {
+        button_right.setOnClickListener(
+                new View.OnClickListener() {//匿名内部类
+                @Override
+                public void onClick(View view) {//点击响应事件
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    inflater = getLayoutInflater();
+                    view = inflater.inflate(R.layout.login, null);
+                    final EditText editText1= view.findViewById(R.id.user);
+                    final EditText editText2= view.findViewById(R.id.password);
 
-            @Override
-            public void onClick(View view) {//点击响应事件
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                inflater = getLayoutInflater();
-                view = inflater.inflate(R.layout.login, null);
-                final EditText editText1= view.findViewById(R.id.user);
-                final EditText editText2= view.findViewById(R.id.password);
+                    builder.setView(view).setTitle("登陆")
+                            .setPositiveButton(R.string.login, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            // 登陆按钮
 
-                builder.setView(view).setTitle("登陆")
-                .setPositiveButton(R.string.login, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // 登陆按钮
+                            userId = editText1.getText().toString();
+                            password = editText2.getText().toString();
 
-                        userId = editText1.getText().toString();
-                        password = editText2.getText().toString();
-
-                        if(!userId.equals("123")) {
-                            Toast.makeText(MainActivity.this, "账号错误", Toast.LENGTH_LONG).show();
+                            if(!userId.equals("123")) {
+                                Toast.makeText(MainActivity.this, "账号错误", Toast.LENGTH_LONG).show();
+                            }
+                            else if(!password.equals("456")){
+                                Toast.makeText(MainActivity.this, "密码错误"+password, Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                Toast.makeText(MainActivity.this, "登陆成功", Toast.LENGTH_LONG).show();
+                            }
                         }
-                        else if(!password.equals("456")){
-                            Toast.makeText(MainActivity.this, "密码错误"+password, Toast.LENGTH_LONG).show();
+                    }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //退出按钮
                         }
-                        else{
-                            Toast.makeText(MainActivity.this, "登陆成功", Toast.LENGTH_LONG).show();
+                        });
+                        builder.show();
                         }
-                    }
-                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //退出按钮
-                    }
-                    });
-                    builder.show();
-                    }
-        });
+            });
     }
 }
